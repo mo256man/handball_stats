@@ -81,6 +81,36 @@ body {
   background-color: rgba(255, 250, 205, 0.5);
 }
 
+.main {
+  position: relative;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.footer {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 100%;
+}
+
+.errorMessage {
+  color: red;
+  font-weight: bold;
+  min-height: 1.2em;
+  line-height: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px auto;
+}
+
+
 img.backgroundImage {
   position: absolute;
   left: 50%;
@@ -92,4 +122,30 @@ img.backgroundImage {
   width: auto;
   height: auto;
   opacity: 0.2;
+}
+
+
+input.passName {
+  background: white;
+  font-size: x-large;
+  text-align: left;
+  width: 80%;
+  display: block;
+  margin: 5px auto;
+}
+
+.btnLogin {
+  background: lightgreen;
+  border: green 4px solid;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: x-large;
+  font-weight: bold;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  margin: 10px;
 }
