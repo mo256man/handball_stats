@@ -12,14 +12,19 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "connect-sqlite3": "^0.9.16",
     "cors": "^2.8.5",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "socket.io": "^4.7.2",
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
     "@types/node": "^25.6.0",
     "typescript": "^6.0.3"
   }
 }
+

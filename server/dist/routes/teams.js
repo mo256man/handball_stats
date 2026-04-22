@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const db_1 = require("../db");
+const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
-router.get('/teams', (req, res) => {
+router.get('/teams', auth_1.requireAuth, (req, res) => {
     const onlyAvailable = req.query.onlyAvailable !== 'false'; // デフォルトは true
     let query = 'SELECT * FROM team';
     if (onlyAvailable) {
@@ -15,7 +16,7 @@ router.get('/teams', (req, res) => {
             res.status(500).json({ error: 'サーバーエラー' });
             return;
         }
-        res.json(rows);
+        res.json(rows || []);
     });
 });
 exports.default = router;

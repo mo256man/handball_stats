@@ -9,9 +9,10 @@ interface TitleProps {
   allTeams: any[];
   setAllPlayers: (players: any[]) => void;
   allPlayers: any[];
+  socket: Socket<ServerToClientEvents, ClientToServerEvents> | null;
 }
 
-const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers }: TitleProps) => {
+const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers, socket }: TitleProps) => {
   const [password, setPassword] = useState("");
   const [passError, setPassError] = useState("");
   const [username, setUsername] = useState("");
@@ -35,6 +36,7 @@ const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers
     try {
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,7 +52,9 @@ const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers
         
         // チームデータ取得
         try {
-          const teamsResponse = await fetch('http://localhost:3000/api/teams');
+          const teamsResponse = await fetch('http://localhost:3000/api/teams', {
+            credentials: 'include'
+          });
           if (teamsResponse.ok) {
             const teams = await teamsResponse.json();
             setAllTeams(teams);
@@ -62,7 +66,9 @@ const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers
 
         // プレイヤーデータ取得
         try {
-          const playersResponse = await fetch('http://localhost:3000/api/players');
+          const playersResponse = await fetch('http://localhost:3000/api/players', {
+            credentials: 'include'
+          });
           if (playersResponse.ok) {
             const players = await playersResponse.json();
             setAllPlayers(players);
@@ -83,12 +89,25 @@ const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:3000/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+    } catch (err) {
+      console.error('ログアウトエラー:', err);
+    }
+    
     setUsername("");
     setPassword("");
     setPassError("");
     setView("home");
     setAllTeams([]);
+    setAllPlayers([]);
   }
 
   const renderPass = (
