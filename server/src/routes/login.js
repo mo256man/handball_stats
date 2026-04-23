@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { db } from '../db';
-import { LoginRequest, LoginResponse, ErrorResponse, User } from '../types/user';
+import { Router } from 'express';
+import { db } from '../db.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
 
-router.post('/login', (req: Request<{}, LoginResponse | ErrorResponse, LoginRequest>, res: Response<LoginResponse | ErrorResponse>) => {
+router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -13,7 +13,7 @@ router.post('/login', (req: Request<{}, LoginResponse | ErrorResponse, LoginRequ
   }
 
   const query = 'SELECT userId as id, userName, password, teamId FROM user WHERE userName = ? AND password = ?';
-  db.get(query, [username, password], (err: Error | null, row: any | undefined) => {
+  db.get(query, [username, password], (err, row) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'サーバーエラー' });
@@ -22,12 +22,12 @@ router.post('/login', (req: Request<{}, LoginResponse | ErrorResponse, LoginRequ
 
     if (row) {
       // セッション作成
-      const sess = req.session as any;
+      const sess = req.session;
       sess.userId = row.id;
       sess.userName = row.userName;
       sess.teamId = row.teamId;
       
-      req.session.save((err: Error | undefined) => {
+      req.session.save((err) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'セッション作成エラー' });
@@ -46,8 +46,8 @@ router.post('/login', (req: Request<{}, LoginResponse | ErrorResponse, LoginRequ
   });
 });
 
-router.post('/logout', (req: Request, res: Response) => {
-  req.session.destroy((err: Error | undefined) => {
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'ログアウトエラー' });

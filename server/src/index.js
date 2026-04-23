@@ -1,16 +1,18 @@
-import express, { Express } from 'express';
+import express from 'express';
 import cors from 'cors';
 import ConnectSqliteStore from 'connect-sqlite3';
 import path from 'path';
 import { createServer } from 'http';
-import { Server as SocketIOServer, Socket } from 'socket.io';
-import loginRouter from './routes/login';
-import teamsRouter from './routes/teams';
-import playersRouter from './routes/players';
+import { Server as SocketIOServer } from 'socket.io';
+import loginRouter from './routes/login.js';
+import teamsRouter from './routes/teams.js';
+import playersRouter from './routes/players.js';
+import { fileURLToPath } from 'url';
+import session from 'express-session';
 
-const session = require('express-session');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const app: Express = express();
+const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: {
@@ -50,7 +52,7 @@ app.use('/api', teamsRouter);
 app.use('/api', playersRouter);
 
 // Socket.IO イベントハンドリング
-io.on('connection', (socket: Socket) => {
+io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
   socket.on('disconnect', () => {

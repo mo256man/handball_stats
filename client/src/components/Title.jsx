@@ -2,17 +2,7 @@ import React, { useState, useEffect, createContext } from 'react';
 import irasutoya from '../assets/irasutoya.png'
 import './Title.css'
 
-interface TitleProps {
-  view: string;
-  setView: (view: string) => void;
-  setAllTeams: (teams: any[]) => void;
-  allTeams: any[];
-  setAllPlayers: (players: any[]) => void;
-  allPlayers: any[];
-  socket: Socket<ServerToClientEvents, ClientToServerEvents> | null;
-}
-
-const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers, socket }: TitleProps) => {
+const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers, socket }) => {
   const [password, setPassword] = useState("");
   const [passError, setPassError] = useState("");
   const [username, setUsername] = useState("");

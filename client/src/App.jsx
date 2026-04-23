@@ -1,11 +1,11 @@
 import React, { useState, useEffect, createContext } from 'react';
-import Title from './components/Title';
+import Title from './components/Title.jsx';
 import './App.css'
 
 function App() {
-  const [view, setView] = useState<string>("home");
-  const [allTeams, setAllTeams] = useState<any[]>([]);
-  const [allPlayers, setAllPlayers] = useState<any[]>([]);
+  const [view, setView] = useState("home");
+  const [allTeams, setAllTeams] = useState([]);
+  const [allPlayers, setAllPlayers] = useState([]);
 
 
   return (
