@@ -1,0 +1,153 @@
+.date-picker-wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+.date-picker-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.date-picker-section label {
+  font-size: x-large;
+  font-weight: bold;
+  color: #333;
+}
+
+.date-picker-section input,
+.date-picker-section .react-datepicker-wrapper {
+  font-size: x-large;
+  text-align: center;
+}
+
+/* ハイライト日付のスタイル */
+.react-datepicker__day.highlighted-date {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+}
+
+.react-datepicker__day.highlighted-date:hover {
+  background-color: #45a049 !important;
+}
+
+.react-datepicker {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem !important;
+}
+
+.react-datepicker__header {
+  background-color: #4CAF50;
+  border-radius: 4px;
+  color: white;
+  font-size: 1.3rem !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+  padding: 8px;
+  margin: 0 2px;
+  font-size: 1.2rem !important;
+  color: #333;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.react-datepicker__day--today {
+  background-color: #E0E0E0 !important;
+  font-weight: normal !important;
+  border-radius: 4px !important;
+}
+
+/* 選択状態が最優先 */
+.react-datepicker__day--selected,
+.react-datepicker__day--selected.react-datepicker__day--today {
+  background-color: #FF6B35 !important;
+  color: white !important;
+  border-radius: 4px !important;
+  font-weight: bold !important;
+  border: 3px solid #CC5529 !important;
+  box-shadow: 0 0 12px rgba(255, 107, 53, 0.8), inset 0 0 4px rgba(0, 0, 0, 0.2) !important;
+  padding: 12px 6px !important;
+  font-size: 1.4rem !important;
+}
+
+button {
+  font-size: 1.1rem !important;
+}
+
+.react-datepicker__header-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  width: auto;
+}
+
+.month-nav-button {
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background-color: lightgreen;
+  border: none;
+  cursor: pointer;
+  font-size: 30px !important;
+  font-weight: bold;
+  color: darkblue;
+  border-radius: 4px;
+}
+
+.month-nav-button:hover {
+  background-color: #45a049;
+}
+
+.month-nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.react-datepicker__header-month-text {
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
+  font-size: 24px !important;
+}
+
+.matches-container {
+  font-size: 1.2rem !important;
+}
+
+.match-item {
+  font-size: 1.2rem !important;
+  padding: 12px !important;
+}
+
+.match-teams {
+  font-size: 1.2rem !important;
+  background: lightyellow;
+  border: 4px solid yellow;
+  border-radius: 10px;
+  width: 400px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matches-loading,
+.matches-empty {
+  font-size: 1.2rem !important;
+}

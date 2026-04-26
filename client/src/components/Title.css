@@ -6,3 +6,13 @@
   color: darkblue;
   text-align: center;
 }
+
+.titleTeamName {
+  width: 100%;
+  color: white;
+  background: darkblue;
+  padding: 5px 0;
+  font-size: x-large;
+  font-weight: bold;
+  text-align: center;
+}

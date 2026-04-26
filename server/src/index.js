@@ -7,6 +7,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import loginRouter from './routes/login.js';
 import teamsRouter from './routes/teams.js';
 import playersRouter from './routes/players.js';
+import matchesRouter from './routes/matches.js';
 import { fileURLToPath } from 'url';
 import session from 'express-session';
 
@@ -16,7 +17,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://192.168.0.6:5173'],
     credentials: true
   }
 });
@@ -25,7 +26,7 @@ const port = 3000;
 const SQLiteStore = ConnectSqliteStore(session);
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://192.168.0.6:5173'],
   credentials: true
 }));
 app.use(express.json());
@@ -50,6 +51,7 @@ app.use(session({
 app.use('/api', loginRouter);
 app.use('/api', teamsRouter);
 app.use('/api', playersRouter);
+app.use('/api', matchesRouter);
 
 // Socket.IO イベントハンドリング
 io.on('connection', (socket) => {

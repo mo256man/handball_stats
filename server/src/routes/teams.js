@@ -19,7 +19,13 @@ router.get('/teams', requireAuth, (req, res) => {
       return;
     }
 
-    res.json(rows || []);
+    // image列をBase64に変換
+    const teamsWithBase64 = (rows || []).map(row => ({
+      ...row,
+      image: row.image ? `data:image/png;base64,${Buffer.from(row.image).toString('base64')}` : null
+    }));
+
+    res.json(teamsWithBase64);
   });
 });
 

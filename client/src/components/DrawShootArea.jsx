@@ -1,0 +1,97 @@
+import React from 'react';
+
+const createSectorPath = (centerX, centerY, radius, startAngle, endAngle) => {
+  // 度数法からラジアンに変換
+  const startRad = (startAngle * Math.PI) / 180;
+  const endRad = (endAngle * Math.PI) / 180;
+  // 開始点の座標
+  const startX = centerX + radius * Math.cos(startRad);
+  const startY = centerY + radius * Math.sin(startRad);
+  // 終了点の座標
+  const endX = centerX + radius * Math.cos(endRad);
+  const endY = centerY + radius * Math.sin(endRad);
+  // 大きい弧かどうか（180度より大きいか）
+  const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+  // パス文字列を生成
+  return `M ${centerX} ${centerY} L ${startX} ${startY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
+};
+
+const DrawShootArea = ({ onClick, width = 200, height = 250, showValue = false, showText = true, values = [] }) => {
+  const x0 = 15;
+  const y0 = 0;
+  const svgWidth = typeof width === 'number' ? width + 2 * x0 : width;
+  const svgHeight = typeof height === 'number' ? height + 2 * y0 : height;
+  const viewBoxW = 200 + 2 * x0;
+  const viewBoxH = 200;
+
+  const labelDefs = [
+    { id: 'LW', x: 15, y: 40, text: 'LW' },
+    { id: 'RW', x: 185, y: 40, text: 'RW' },
+    { id: 'L6', x: 50, y: 80, text: 'L6' },
+    { id: 'R6', x: 150, y: 80, text: 'R6' },
+    { id: 'L9', x: 40, y: 115, text: 'L9' },
+    { id: 'R9', x: 160, y: 115, text: 'R9' },
+    { id: 'M6', x: 100, y: 85, text: 'M6' },
+    { id: 'M9', x: 100, y: 120, text: 'M9' },
+    { id: '7m', x: 100, y: 170, text: '7m' },
+  ];
+
+  const labelBox = (x, y, w = 48, h = 20) => ({ x: x - w / 2, y: y - h / 2, w, h });
+
+  return (
+    <svg width={svgWidth} height={svgHeight} viewBox={`0 0 ${viewBoxW} ${viewBoxH}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
+      <path d={createSectorPath(85 + x0, 10 + y0, 130, 90, 135)} fill="lightyellow" onClick={() => onClick("area", "L9")} className="shootArea"/>
+      <path d={createSectorPath(115 + x0, 10 + y0, 130, 45, 90)} fill="lightyellow" onClick={() => onClick("area", "R9")} className="shootArea" />
+      <path d={createSectorPath(85 + x0, 10 + y0, 90, 90, 135)} fill="lightblue" onClick={() => onClick("area", "L6")} className="shootArea" />
+      <path d={createSectorPath(115 + x0, 10 + y0, 90, 45, 90)} fill="lightblue" onClick={() => onClick("area", "R6")} className="shootArea" />
+      <path d={`M ${0 + x0} ${10 + y0} L ${85 + x0} ${10 + y0} L ${0 + x0} ${95 + y0} Z`} fill="lightgreen" onClick={() => onClick("area", "LW")} className="shootArea" />
+      <path d={`M ${200 + x0} ${10 + y0} L ${115 + x0} ${10 + y0} L ${200 + x0} ${95 + y0} Z`} fill="lightgreen" onClick={() => onClick("area", "RW")} className="shootArea" />
+      <rect x={75 + x0} y={70 + y0} width={50} height={30} fill="lightblue" onClick={() => onClick("area", "M6")} className="shootArea" />
+      <rect x={75 + x0} y={100 + y0} width={50} height={40} fill="lightyellow" onClick={() => onClick("area", "M9")} className="shootArea" />
+      <rect x={75 + x0} y={150 + y0} width={50} height={40} fill="lightyellow" onClick={() => onClick("area", "7m")} className="shootArea" />
+      <path d={`M ${25 + x0} ${10 + y0} A 60 60 0 0 0 ${85 + x0} ${70 + y0} L ${115 + x0} ${70 + y0} A 60 60 0 0 0 ${175 + x0} ${10 + y0} Z`} fill="white" stroke="black" strokeWidth="1" />
+      <path d={`M 0 300 L 0 0 L ${200 + 2*x0} 0 L ${200 + 2*x0} ${300 + 2*y0} L ${200 + x0} ${300 + 2*y0} L ${200 + x0} ${y0} L ${x0} ${y0} L ${x0} ${200+y0} Z`} fill="white" stroke="none" strokeWidth="3" />
+      <path d={`M ${0 + x0} ${300 + y0} L ${0 + x0} ${10 + y0} L ${200 + x0} ${10 + y0} L ${200 + x0} ${300 + y0}`} fill="none" stroke="black" strokeWidth="1" />
+      <rect x={85 + x0} y={0 + y0} width={30} height={10} fill="white" stroke="black" strokeWidth="1" />
+      {labelDefs.map((lbl, idx) => {
+        const textValue = showValue ? (values && values[idx] !== undefined ? values[idx] : lbl.text) : lbl.text;
+        const box = labelBox(lbl.x + x0, lbl.y + y0);
+        const isZero = showValue && (String(textValue).trim() === '0' || String(textValue).trim() === '0%');
+        return (
+          <g key={`label-${lbl.id}`}>
+            {showValue && (
+              <rect
+                x={box.x}
+                y={box.y}
+                width={box.w}
+                height={box.h}
+                fill={isZero ? '#d3d3d3' : 'white'}
+                stroke="black"
+                strokeWidth={1}
+                rx={4}
+                ry={4}
+                onClick={onClick ? (e => { e.stopPropagation(); onClick('area', lbl.id); }) : undefined}
+                style={{ cursor: onClick ? 'pointer' : 'default' }}
+              />
+            )}
+            {showText && (
+              <text
+                x={lbl.x + x0}
+                y={lbl.y + y0}
+                className="shootAreaText"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                onClick={onClick ? (e => { e.stopPropagation(); onClick('area', lbl.id); }) : undefined}
+                style={{ cursor: onClick ? 'pointer' : 'default' }}
+              >
+                {textValue}
+              </text>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+};
+
+export default DrawShootArea;

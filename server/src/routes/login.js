@@ -35,6 +35,7 @@ router.post('/login', (req, res) => {
         }
         
         res.json({
+          userId: row.id,
           userName: row.userName,
           password: row.password,
           teamId: row.teamId
