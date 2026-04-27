@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import DrawShootArea from "./DrawShootArea";
 import DrawGoal from "./DrawGoal";
-// import "./style_input.css";
-import styles from "./InputTable.module.css";
+import "./InputTable.css";
 
 export default function InputSheet({ teams, players, setView, matchId, isEditor, matchDate, offenseTeam, setOffenseTeam, appOutputSheet, setAppOutputSheet, score1st, setScore1st, score2nd, setScore2nd, score, setScore, session, gks }) {
 
@@ -373,30 +372,30 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     };
 
     return (
-      <div className={styles.btnPlayers}>
+      <div className="btnPlayers">
         {keyboardConfig.btns.map((btn, idx) => {
           const isActive = (typeof inputValues.player === 'object') ? String(inputValues.player.number) === String(btn.value.number) : String(inputValues.player) === String(btn.value.number);
           const isGK = btn.value.position === "GK";
           return (
             <div
               key={idx} 
-              className={`${styles.btnPlayer} ${isGK ? styles.colorGK : styles.colorFP}`}
+              className={`btnPlayer ${isGK ? "colorGK" : "colorFP"}`}
               onClick={() => {
                 setInputValues(prev => ({ ...prev, player: btn.value }));
                 append(String(btn.value.number));
               }}
             >
-              <div className={styles.fontLarge}>{btn.label.number}</div>
-              <div className={styles.fontSmall}>{btn.label.shortName}</div>
+              <div className="fontLarge">{btn.label.number}</div>
+              <div className="fontSmall">{btn.label.shortName}</div>
             </div>
           );
         })}
         <div key="blank" aria-hidden={true} style={{ visibility: 'hidden'}} />
         <div 
           key="del" 
-          className={`${styles.btnPlayer} ${styles.colorDel}`} 
+          className={`btnPlayer colorDel`} 
           onClick={() => { setInputValues(prev => ({ ...prev, player: "" })); backspace(); }}>
-          <div className={styles.fontLarge}>削除</div>
+          <div className="fontLarge">削除</div>
         </div>
       </div>
     );
@@ -412,11 +411,11 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     };
 
     return (
-      <div className={styles.btnSitus}>
+      <div className="btnSitus">
         {keyboardConfig.btns.map((btn, idx) => (
           <div
             key={idx}
-            className={styles.btnSitu}
+            className="btnSitu"
             onClick={() => {
               // 同じボタンを2回押したら値を消去する（トグル動作）
               setInputValues(prev => ({ ...prev, situation: String(prev.situation) === String(btn.value) ? '' : btn.value }));
@@ -451,9 +450,9 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     const result = {
       title: keyboardConfig.title,
       component: (
-      <div className={styles.btnPlayer} onClick={() => handleKeyboardClick(btns.value)}>
+      <div className="btnPlayer" onClick={() => handleKeyboardClick(btns.value)}>
         {keyboardConfig.btns.map((btn, idx) => (
-          <div className={styles.fontLarge}>{btn.label}</div>
+          <div className="fontLarge">{btn.label}</div>
         ))}
       </div>)
     }
@@ -478,26 +477,26 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
       ],
     }
     return (
-      <div className={styles.btnPlayers}>
+      <div className="btnPlayers">
         {keyboardConfig.btns.map((btn, idx) => {
           return (
             <div
               key={idx} 
-              className={`${styles.btnPlayer} ${styles.colorFP}`}
+              className={`btnPlayer colorFP`}
               onClick={() => {
                 setInputValues(prev => ({ ...prev, kind: btn.value }));
               }}
             >
-              <div className={styles.fontLarge}>{btn.label}</div>
-              <div className={styles.fontSmall}>{btn.value}</div>
+              <div className="fontLarge">{btn.label}</div>
+              <div className="fontSmall">{btn.value}</div>
             </div>
           );
         })}
         <div 
           key="del" 
-          className={`${styles.btnPlayer} ${styles.colorDel}`} 
+          className={`btnPlayer colorDel`} 
           onClick={() => { setInputValues(prev => ({ ...prev, kind: "" })); backspace(); }}>
-          <div className={styles.fontLarge}>削除</div>
+          <div className="fontLarge">削除</div>
         </div>
       </div>
     );
@@ -601,15 +600,15 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
             style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontSize: '0.75rem', overflow: 'hidden', width: '100%', boxSizing: 'border-box', minWidth: 0 }} className={"keyboard-btn " + (String(inputValues.result) === String(btn.value) ? 'active' : '')} 
             onClick={() => setInputValues(prev => ({ ...prev, result: btn.value }))}
           >
-            <div className={styles.fontLarge}>{btn.value}</div>
-            <div className={styles.fontSmall}>{btn.label}</div>
+            <div className="fontLarge">{btn.value}</div>
+            <div className="fontSmall">{btn.label}</div>
           </div>
         ))}
         <div 
           key="del" 
-          className={`${styles.btnPlayer} ${styles.colorDel}`} 
+          className={`btnPlayer colorDel`} 
           onClick={() => { setInputValues(prev => ({ ...prev, result: "" })); backspace(); }}>
-          <div className={styles.fontLarge}>削除</div>
+          <div className="fontLarge">削除</div>
         </div>
       </div>
     )
@@ -937,7 +936,7 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
   
   // setPlay の表示を返す関数
   const renderSetPlay = (
-    <div id="setPlay" className={styles.setPlayArea}>
+    <div id="setPlay" className="setPlayArea">
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
         return (
@@ -959,21 +958,21 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
   }
 
   const inputedValues = (
-    <div id="inputedValues" className={styles.inputedValues}>
-      <div className={styles.cell_header}>Situ</div>
-      <div className={styles.cell_header}>Player</div>
-      <div className={styles.cell_header}>Kind</div>
-      <div className={styles.cell_header}>Result</div>
-      <div className={styles.cell_header}>Area</div>
-      <div className={styles.cell_header}>Goal</div>
-      <div className={manualAtkCnt==="A" ? styles.cell_atk_auto : styles.cell_atk_manual} id="atk" onClick={changeManualAtkCount}>Atk</div>
-      <div className={styles.cell_value} id="value_situ">{inputValues.situation}</div>
-      <div className={styles.cell_value} id="value_player">{(typeof inputValues.player === 'object' && `${inputValues.player.number} ${inputValues.player.shortName}`) || inputValues.player}</div>
-      <div className={styles.cell_value} id="value_kind">{inputValues.kind}</div>
-      <div className={styles.cell_value} id="value_result">{inputValues.result}</div>
-      <div className={styles.cell_value} id="value_shoot_area">{inputValues.shootArea}</div>
-      <div className={styles.cell_value} id="value_goal">{inputValues.goal}</div>
-      <div className={styles.cell_value} id="value_atk">{manualAtkCnt}</div>
+    <div id="inputedValues" className="inputedValues">
+      <div className="cell_header">Situ</div>
+      <div className="cell_header">Player</div>
+      <div className="cell_header">Kind</div>
+      <div className="cell_header">Result</div>
+      <div className="cell_header">Area</div>
+      <div className="cell_header">Goal</div>
+      <div className={manualAtkCnt==="A" ? "cell_atk_auto" : "cell_atk_manual"} id="atk" onClick={changeManualAtkCount}>Atk</div>
+      <div className="cell_value" id="value_situ">{inputValues.situation}</div>
+      <div className="cell_value" id="value_player">{(typeof inputValues.player === 'object' && `${inputValues.player.number} ${inputValues.player.shortName}`) || inputValues.player}</div>
+      <div className="cell_value" id="value_kind">{inputValues.kind}</div>
+      <div className="cell_value" id="value_result">{inputValues.result}</div>
+      <div className="cell_value" id="value_shoot_area">{inputValues.shootArea}</div>
+      <div className="cell_value" id="value_goal">{inputValues.goal}</div>
+      <div className="cell_value" id="value_atk">{manualAtkCnt}</div>
     </div>
   );
 
@@ -1089,16 +1088,16 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
 
 
   const renderOffenseTeamBtn = (
-    <div className={styles.offenseTeamBtn} onClick={changeTeam}>
+    <div className="offenseTeamBtn" onClick={changeTeam}>
       {console.log(teams[offenseTeam])}
       <div>攻撃</div>
-      <img src={teams[offenseTeam]?.image || ""} className={styles.offenseTeamBtnImg} />
+      <img src={teams[offenseTeam]?.image || ""} className="offenseTeamBtnImg" />
       <div style={{fontSize:"large", fontWeight:"bold"}}>{teams[offenseTeam].shortName}</div>
     </div>
   );
 
   const renderMain = (
-    <div className={`${styles.mainContent} ${oppoTeam === 0 ? 'bgTeam0' : 'bgTeam1'}`}>
+    <div className={`mainContent ${oppoTeam === 0 ? 'bgTeam0' : 'bgTeam1'}`}>
       {renderOppoPlayersPopup()}
       <div className="mainContainer" style={{display: 'flex', flexDirection: 'row', flex: '1 1 auto', minHeight: 0, overflow: 'auto', gap: 0}}>
         <div id="leftColumn" className="column" style={{flex: '1 1 0%', display: 'flex', flexDirection: 'column', height: '100%', minWidth: 0}}>
@@ -1192,32 +1191,32 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
   );
 
   const renderHeader = (
-    <div className={styles.header}>
-      <div className={styles.headerLeft}>
+    <div className="header">
+      <div className="headerLeft">
         <div>【{matchDate}】</div>
         <div>{teams[0].shortName} vs {teams[1].shortName}</div>
       </div>
-      <div className={styles.headerRight}>
-        <div onClick={() => setView(appOutputSheet)} className={styles.btnUI}>📋</div>
-        <div onClick={() => setView("inputMatch")} className={styles.btnUI}>🔙</div>
+      <div className="headerRight">
+        <div onClick={() => setView(appOutputSheet)} className="btnUI">📋</div>
+        <div onClick={() => setView("selectTeam")} className="btnUI">🔙</div>
       </div>
     </div>
   );
 
   const renderFooter = (
-  <div className={styles.footer}>
+  <div className="footer">
     {inputMode ? 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 10%', gap: '10px' }}>
-        <div onClick={handleSubmit} className={styles.btnStart} style={{backgroundColor: '#007BFF'}}>登録</div>
-        <div onClick={() => setInputMode(false)} className={styles.btnStart} style={{backgroundColor: '#6C757D'}}>修正</div>
+        <div onClick={handleSubmit} className="btnStart" style={{backgroundColor: '#007BFF'}}>登録</div>
+        <div onClick={() => setInputMode(false)} className="btnStart" style={{backgroundColor: '#6C757D'}}>修正</div>
       </div>
     :
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 4fr 2fr 1fr 10%', gap: '10px' }}>
-        <div onClick={() => loadRecord('prev')} className={styles.btnStart} style={{backgroundColor: '#FFB6C1'}}>＜</div>
-        <div className={styles.btnStart} style={{backgroundColor: '#E0E0E0'}}>修正</div>
-        <div onClick={() => loadRecord('next')} className={styles.btnStart} style={{backgroundColor: '#FFB6C1'}}>＞</div>
-        <div className={styles.btnStart} style={{backgroundColor: '#FF6347'}}>消去</div>
-        <div onClick={() => setInputMode(true)} className={styles.btnStart} style={{backgroundColor: '#6C757D'}}>入力</div>
+        <div onClick={() => loadRecord('prev')} className="btnStart" style={{backgroundColor: '#FFB6C1'}}>＜</div>
+        <div className="btnStart" style={{backgroundColor: '#E0E0E0'}}>修正</div>
+        <div onClick={() => loadRecord('next')} className="btnStart" style={{backgroundColor: '#FFB6C1'}}>＞</div>
+        <div className="btnStart" style={{backgroundColor: '#FF6347'}}>消去</div>
+        <div onClick={() => setInputMode(true)} className="btnStart" style={{backgroundColor: '#6C757D'}}>入力</div>
       </div>
     }
   </div>
@@ -1225,7 +1224,7 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
 
 
   const content = (
-    <div className={`${styles.main} ${oppoTeam === 0 ? 'bgTeam0' : 'bgTeam1'}`}>
+    <div className={`main ${oppoTeam === 0 ? 'bgTeam0' : 'bgTeam1'}`}>
       {renderHeader}
       {renderMain}
       {renderFooter}

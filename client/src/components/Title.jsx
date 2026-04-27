@@ -151,17 +151,19 @@ const Title = ({ view, setView, setAllTeams, allTeams, setAllPlayers, allPlayers
 
 
   return (
-    <div id="base" className="bgTeam0" style={{ width: '50%' }}>
-      <img src={teams[0]?.image || irasutoya} className="backgroundImage"/>
-      <div className="main">
-        <div className="titleString">ハンドスタッツ入力支援</div>
-        {teams[0]?.teamName && (
-          <div className="titleTeamName">{teams[0].teamName}</div>
-        )}
-      </div>
-      <div className="footer">
-        {view === "home" && renderPass}
-        {view === "menu" && renderMenu}
+    <div id="background">
+      <div id="base" className="bgTeam0" style={{ width: '50%' }}>
+        <img src={teams[0]?.image || irasutoya} className="backgroundImage"/>
+        <div className="main">
+          <div className="titleString">ハンドスタッツ入力支援</div>
+          {teams[0]?.teamName && (
+            <div className="titleTeamName">{teams[0].teamName}</div>
+          )}
+        </div>
+        <div className="footer">
+          {view === "home" && renderPass}
+          {view === "menu" && renderMenu}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./SelectTeam.module.css";
+import "./SelectTeam.css";
 import { ja } from "date-fns/locale";
 import { Player } from "./Player";
 
@@ -229,7 +229,7 @@ export default function SelectTeam(
     
     return (
       <div 
-        className={styles.lockBtnArea}
+        className="lockBtnArea"
         id="playerLocked"
         onClick={() => {
           setPlayerLocked((prev) => !prev);
@@ -243,11 +243,11 @@ export default function SelectTeam(
 
   const renderTeamTables = () => {
     return (
-      <div className={styles.tablesContainer}>
+      <div className="tablesContainer">
         {teams.map((team, index) => (
-          <div key={index} className={`${styles.teamWrapper} ${index === 0 ? "bgTeam0" : "bgTeam1"}`}>
+          <div key={index} className={`teamWrapper ${index === 0 ? "bgTeam0" : "bgTeam1"}`}>
             <img src={teams[index]?.image}/>
-            <div className={styles.teamTableWrapper}>
+            <div className="teamTableWrapper">
               <div style={{ textAlign: "center", fontSize: "x-large", fontWeight: "bold" }}>{index===0 ? "自チーム" : "相手チーム"}</div>
               {renderTable(index)}
             </div>
@@ -260,7 +260,7 @@ export default function SelectTeam(
   const renderTable = (teamIdx) => {
     const playersArr = !teams[teamIdx] ? [] : (players[teamIdx] || []); // teams[teamIdx]がnullの場合は空配列
     const selectedCount = playersArr.filter(p => p.isOnBench).length;
-    const teamName = teams[teamIdx]?.teamName || ""; // team1が未選択の場合は空文字
+    const teamName = teams[teamIdx]?.teamName || ""; // teamが未選択の場合は空文字
     return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: 0, flex: 1 }}>
         <select
@@ -281,7 +281,7 @@ export default function SelectTeam(
               setPlayers(newPlayers);
             }
           }}
-          className={styles.teamSelect}
+          className="teamSelect"
           disabled={!!matchId}
         >
           {teamIdx === 1 && !teams[teamIdx] && (
@@ -291,11 +291,11 @@ export default function SelectTeam(
             <option key={index} value={name}>{name}</option>
           ))}
         </select>
-      <div className={styles.selectedMemberCount}>
+      <div className="selectedMemberCount">
         選択中: {selectedCount} / {playersArr.length}人
       </div>
-      <div className={styles.tableContainer}>
-        <table className={styles.teamTable}>
+      <div className="tableContainer">
+        <table className="teamTable">
           <thead>
             <tr>
               <th>背番号</th>
@@ -308,7 +308,7 @@ export default function SelectTeam(
               <tr
                 key={index}
                 onClick={() => playerLocked === false && toggleMemberSelection(teamIdx, index)}
-                className={player.isOnBench ? styles['on-bench'] : styles['off-bench']}
+                className={player.isOnBench ? "on-bench" : "off-bench"}
                 style={{ cursor: playerLocked === false ? 'pointer' : 'default' }}
               >
                 <td>{player.number}</td>
@@ -324,17 +324,17 @@ export default function SelectTeam(
   }
 
   const content = (
-    <div id="base" className="bgTeam0">
+    <div id="base">
       <div className="main">
         <div onClick={() => setView("selectMatch")} className="btnBack">🔙</div>
-        <div className={styles.titleArea}>
+        <div className="titleArea">
           {renderLockBtn()}
-          <div className={styles.titleString}>チーム・選手選択</div>
+          <div className="titleString">チーム・選手選択</div>
           <div>{matchDate}</div>
         </div>
         {renderTeamTables()}
         <div className="footer">
-          <div className={styles.btnStart} onClick={() => handleStartClick("inputTable")}>START</div>
+          <div className="btnLogin" onClick={() => handleStartClick("inputTable")}>START</div>
         </div>
     </div>
     </div>
