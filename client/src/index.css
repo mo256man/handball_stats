@@ -16,6 +16,7 @@ body {
 }
 
 #root {
+  background: white;
   width: 1376px;
   height: 942px;
   box-sizing: border-box;
