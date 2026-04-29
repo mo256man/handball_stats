@@ -39,20 +39,36 @@ const DrawShootArea = ({ onClick, width = 200, height = 250, showValue = false, 
   const labelBox = (x, y, w = 48, h = 20) => ({ x: x - w / 2, y: y - h / 2, w, h });
 
   return (
-    <svg width={svgWidth} height={svgHeight} viewBox={`0 0 ${viewBoxW} ${viewBoxH}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
-      <path d={createSectorPath(85 + x0, 10 + y0, 130, 90, 135)} fill="lightyellow" onClick={() => onClick("area", "L9")} className="shootArea"/>
-      <path d={createSectorPath(115 + x0, 10 + y0, 130, 45, 90)} fill="lightyellow" onClick={() => onClick("area", "R9")} className="shootArea" />
-      <path d={createSectorPath(85 + x0, 10 + y0, 90, 90, 135)} fill="lightblue" onClick={() => onClick("area", "L6")} className="shootArea" />
-      <path d={createSectorPath(115 + x0, 10 + y0, 90, 45, 90)} fill="lightblue" onClick={() => onClick("area", "R6")} className="shootArea" />
-      <path d={`M ${0 + x0} ${10 + y0} L ${85 + x0} ${10 + y0} L ${0 + x0} ${95 + y0} Z`} fill="lightgreen" onClick={() => onClick("area", "LW")} className="shootArea" />
-      <path d={`M ${200 + x0} ${10 + y0} L ${115 + x0} ${10 + y0} L ${200 + x0} ${95 + y0} Z`} fill="lightgreen" onClick={() => onClick("area", "RW")} className="shootArea" />
-      <rect x={75 + x0} y={70 + y0} width={50} height={30} fill="lightblue" onClick={() => onClick("area", "M6")} className="shootArea" />
-      <rect x={75 + x0} y={100 + y0} width={50} height={40} fill="lightyellow" onClick={() => onClick("area", "M9")} className="shootArea" />
-      <rect x={75 + x0} y={150 + y0} width={50} height={40} fill="lightyellow" onClick={() => onClick("area", "7m")} className="shootArea" />
-      <path d={`M ${25 + x0} ${10 + y0} A 60 60 0 0 0 ${85 + x0} ${70 + y0} L ${115 + x0} ${70 + y0} A 60 60 0 0 0 ${175 + x0} ${10 + y0} Z`} fill="white" stroke="black" strokeWidth="1" />
-      <path d={`M 0 300 L 0 0 L ${200 + 2*x0} 0 L ${200 + 2*x0} ${300 + 2*y0} L ${200 + x0} ${300 + 2*y0} L ${200 + x0} ${y0} L ${x0} ${y0} L ${x0} ${200+y0} Z`} fill="white" stroke="none" strokeWidth="3" />
-      <path d={`M ${0 + x0} ${300 + y0} L ${0 + x0} ${10 + y0} L ${200 + x0} ${10 + y0} L ${200 + x0} ${300 + y0}`} fill="none" stroke="black" strokeWidth="1" />
-      <rect x={85 + x0} y={0 + y0} width={30} height={10} fill="white" stroke="black" strokeWidth="1" />
+<svg width={svgWidth} height={svgHeight} viewBox={`0 0 ${viewBoxW} ${viewBoxH}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
+  <path d={`M ${0 + x0} ${300 + y0} L ${0 + x0} ${10 + y0} L ${200 + x0} ${10 + y0} L ${200 + x0} ${300 + y0}`} fill="white" stroke="none" />
+
+  {/* 扇形エリア */}
+  <path d={createSectorPath(85 + x0, 10 + y0, 130, 90, 135)} fill="lightyellow" onClick={() => onClick("area", "L9")} className="shootArea"/>
+  <path d={createSectorPath(85 + x0, 10 + y0, 130, 90, 135)} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+  <path d={createSectorPath(115 + x0, 10 + y0, 130, 45, 90)} fill="lightyellow" onClick={() => onClick("area", "R9")} className="shootArea" />
+  <path d={createSectorPath(115 + x0, 10 + y0, 130, 45, 90)} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+  <path d={createSectorPath(85 + x0, 10 + y0, 90, 90, 135)} fill="lightblue" onClick={() => onClick("area", "L6")} className="shootArea" />
+  <path d={createSectorPath(85 + x0, 10 + y0, 90, 90, 135)} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+  <path d={createSectorPath(115 + x0, 10 + y0, 90, 45, 90)} fill="lightblue" onClick={() => onClick("area", "R6")} className="shootArea" />
+  <path d={createSectorPath(115 + x0, 10 + y0, 90, 45, 90)} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+  <path d={`M ${0 + x0} ${10 + y0} L ${85 + x0} ${10 + y0} L ${0 + x0} ${95 + y0} Z`} fill="lightgreen" onClick={() => onClick("area", "LW")} className="shootArea" />
+  <path d={`M ${200 + x0} ${10 + y0} L ${115 + x0} ${10 + y0} L ${200 + x0} ${95 + y0} Z`} fill="lightgreen" onClick={() => onClick("area", "RW")} className="shootArea" />
+
+  {/* 中央四角形（扇形より上） */}
+  <rect x={75 + x0} y={70 + y0} width={50} height={30} fill="lightblue" onClick={() => onClick("area", "M6")} className="shootArea" />
+  <rect x={75 + x0} y={70 + y0} width={50} height={30} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+  <rect x={75 + x0} y={100 + y0} width={50} height={40} fill="lightyellow" onClick={() => onClick("area", "M9")} className="shootArea" />
+  <rect x={75 + x0} y={100 + y0} width={50} height={40} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+  <rect x={75 + x0} y={150 + y0} width={50} height={40} fill="lightyellow" onClick={() => onClick("area", "7m")} className="shootArea" />
+  <rect x={75 + x0} y={150 + y0} width={50} height={40} fill="none" stroke="black" strokeWidth="1" strokeDasharray="2,2" />
+
+  {/* 半円形（最前面） */}
+  <path d={`M ${25 + x0} ${10 + y0} A 60 60 0 0 0 ${85 + x0} ${70 + y0} L ${115 + x0} ${70 + y0} A 60 60 0 0 0 ${175 + x0} ${10 + y0} Z`} fill="white" stroke="black" strokeWidth="1" />
+
+  <path d={`M 0 300 L 0 0 L ${200 + 2*x0} 0 L ${200 + 2*x0} ${300 + 2*y0} L ${200 + x0} ${300 + 2*y0} L ${200 + x0} ${y0} L ${x0} ${y0} L ${x0} ${200+y0} Z`} fill="white" stroke="none" strokeWidth="1" />
+  <path d={`M ${0 + x0} ${300 + y0} L ${0 + x0} ${10 + y0} L ${200 + x0} ${10 + y0} L ${200 + x0} ${300 + y0}`} fill="none" stroke="black" strokeWidth="1" />
+  <rect x={85 + x0} y={0 + y0} width={30} height={10} fill="white" stroke="black" strokeWidth="1" />
+
       {labelDefs.map((lbl, idx) => {
         const textValue = showValue ? (values && values[idx] !== undefined ? values[idx] : lbl.text) : lbl.text;
         const box = labelBox(lbl.x + x0, lbl.y + y0);
