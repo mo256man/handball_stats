@@ -236,10 +236,11 @@ input.passName {
   flex: 1 1 auto;
   flex-direction: column;
   border: 1px solid black;
-  padding: 12px;
+  padding: 5px;
   background: white;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .group .content_map {

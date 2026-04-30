@@ -364,41 +364,47 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     return result
   }
 
-  const setPersistentPlayers = () => {
+  const renderPlayerBtns = () => {
     const keyboardConfig = {
       btns: players[offenseTeam].map((p) => ({
-        label: { number: p.number, shortname: p.shortName },
+        label_number: p.number,
+        label_name: p.shortName,
         value: p,
       }))
     };
 
     return (
-      <div className="btnPlayers">
-        {keyboardConfig.btns.map((btn, idx) => {
-          const isActive = (typeof inputValues.player === 'object') ? String(inputValues.player.number) === String(btn.value.number) : String(inputValues.player) === String(btn.value.number);
-          const isGK = btn.value.position === "GK";
-          return (
-            <div
-              key={idx} 
-              className={`btnPlayer ${isGK ? "colorGK" : "colorFP"}`}
-              onClick={() => {
-                setInputValues(prev => ({ ...prev, player: btn.value }));
-                append(String(btn.value.number));
-              }}
-            >
-              <div className="fontLarge">{btn.label.number}</div>
-              <div className="fontSmall">{btn.label.shortName}</div>
+        <div className="group">
+          <div className="label">Player</div>
+          <div className="content_table" id="areaNumber">
+            <div className="btnPlayers">
+              {keyboardConfig.btns.map((btn, idx) => {
+                const isActive = (typeof inputValues.player === 'object') ? String(inputValues.player.number) === String(btn.value.number) : String(inputValues.player) === String(btn.value.number);
+                const isGK = btn.value.position === "GK";
+                return (
+                  <div
+                    key={idx} 
+                    className={`btnPlayer ${isGK ? "colorGK" : "colorFP"}`}
+                    onClick={() => {
+                      setInputValues(prev => ({ ...prev, player: btn.value }));
+                      append(String(btn.value.number));
+                    }}
+                  >
+                    <div className="fontLarge">{btn.label_number}</div>
+                    <div className="fontSmall">{btn.label_name}</div>
+                  </div>
+                );
+              })}
+              <div key="blank" aria-hidden={true} style={{ visibility: 'hidden'}} />
+              <div 
+                key="del" 
+                className={`btnPlayer colorDel`} 
+                onClick={() => { setInputValues(prev => ({ ...prev, player: "" })); backspace(); }}>
+                <div className="fontLarge">削除</div>
+              </div>
             </div>
-          );
-        })}
-        <div key="blank" aria-hidden={true} style={{ visibility: 'hidden'}} />
-        <div 
-          key="del" 
-          className={`btnPlayer colorDel`} 
-          onClick={() => { setInputValues(prev => ({ ...prev, player: "" })); backspace(); }}>
-          <div className="fontLarge">削除</div>
+          </div>
         </div>
-      </div>
     );
   }
 
@@ -985,8 +991,8 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
       </thead>
       <tbody>
         <tr>
-          <td className={offenseTeam === 0 ? "cell_value bgTeam0" : "cell_value bgTeam1"} id="value_yc"></td>
-          <td className={offenseTeam === 0 ? "cell_value bgTeam0" : "cell_value bgTeam1"} id="value_wmin"></td>
+          <td className={offenseTeam === 1 ? "cell_value bgTeam0" : "cell_value bgTeam1"} id="value_yc"></td>
+          <td className={offenseTeam === 1 ? "cell_value bgTeam0" : "cell_value bgTeam1"} id="value_wmin"></td>
           <td className="cell_value bgWhite" id="value_situ">{inputValues.situation}</td>
           <td className="cell_value bgWhite" id="value_player">{(typeof inputValues.player === 'object' && `${inputValues.player.number} ${inputValues.player.shortName}`) || inputValues.player}</td>
           <td className="cell_value bgWhite" id="value_kind">{inputValues.kind}</td>
@@ -1075,16 +1081,7 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
   );
 
 const renderMainContent = (
-  <div
-    className="mainContent"
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      flex: '1 1 auto',
-      minHeight: 0,
-      overflow: 'auto',
-    }}
-  >
+  <div className="mainContent">
     <div className="row" style={{ flex: '0 0 auto', display: 'flex', gap: '10px' }}>
       <button className="btnHalf" onClick={changeHalf}>
         {currentHalf}
@@ -1097,38 +1094,9 @@ const renderMainContent = (
       </div>
     </div>
 
-    <div
-      id="inputArea"
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        height: '100%',
-        gap: 0,
-      }}
-      className= {offenseTeam === 0 ? "bgTeam0" : "bgTeam1"}
-    >
-      <div
-        id="input_column"
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-          minHeight: 0,
-          minWidth: 0,
-        }}
-      >
-        <div className="row">
-          <div className="group" style={{ width: '100%' }}>
-            <div className="label">Player</div>
-            <div className="content_table" style={{ width: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
-              <div id="areaNumber" style={{ border: '1px solid red', width: '100%', boxSizing: 'border-box' }}>
-                {setPersistentPlayers()}
-              </div>
-            </div>
-          </div>
-        </div>
+    <div id="inputArea" className= {offenseTeam === 0 ? "bgTeam0" : "bgTeam1"}>
+      <div id="input_column">
+        {renderPlayerBtns()}
 
         <div className="row" style={{ display: 'flex', alignItems: 'flex-start', flex: 1, minHeight: 0 }}>
           <div className="group">
