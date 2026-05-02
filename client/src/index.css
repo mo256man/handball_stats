@@ -211,7 +211,6 @@ input.passName {
 }
 
 .group {
-  border: 1px solid green;
   display: flex;
   flex-direction: column;
   padding: 2px;

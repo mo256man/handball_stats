@@ -365,21 +365,19 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
   }
 
   const renderPlayerBtns = () => {
-    const keyboardConfig = {
-      btns: players[offenseTeam].map((p) => ({
-        label_number: p.number,
-        label_name: p.shortName,
-        value: p,
-      }))
-    };
+    const btns = players[offenseTeam].map((p) => ({
+      number: p.number,
+      position: p.position,
+      name: p.shortName,
+      value: p,
+    }));
 
     return (
-        <div className="group">
+        <div className="group" style={{ flex: 1, minHeight: 0 }}>
           <div className="label">Player</div>
-          <div className="content_table" id="areaNumber">
-            <div className="btnPlayers">
-              {keyboardConfig.btns.map((btn, idx) => {
-                const isActive = (typeof inputValues.player === 'object') ? String(inputValues.player.number) === String(btn.value.number) : String(inputValues.player) === String(btn.value.number);
+          <div className="content_table">
+            <div className="btnPlayers" id="areaNumber">
+              {btns.map((btn, idx) => {
                 const isGK = btn.value.position === "GK";
                 return (
                   <div
@@ -390,25 +388,19 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
                       append(String(btn.value.number));
                     }}
                   >
-                    <div className="fontLarge">{btn.label_number}</div>
-                    <div className="fontSmall">{btn.label_name}</div>
+                    <div style={{ fontSize: "xx-large", fontWeight: "bold" }}>{btn.number}</div>
+                    <div style={{ fontSize: "large"}}>{btn.position}</div>
+                    <div style={{ fontSize: "large", whiteSpace: "nowrap" }}>{btn.name}</div>
                   </div>
                 );
               })}
-              <div key="blank" aria-hidden={true} style={{ visibility: 'hidden'}} />
-              <div 
-                key="del" 
-                className={`btnPlayer colorDel`} 
-                onClick={() => { setInputValues(prev => ({ ...prev, player: "" })); backspace(); }}>
-                <div className="fontLarge">削除</div>
-              </div>
             </div>
           </div>
         </div>
     );
   }
 
-  const setPersistentSituation = () => {
+  const renderSituBtns = () => {
     const keyboardConfig = {
       btns: [
         { label: "▲", value: "+" },
@@ -418,20 +410,20 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     };
 
     return (
-      <div className="btnSitus">
-        {keyboardConfig.btns.map((btn, idx) => (
-          <div
-            key={idx}
-            className="btnSitu"
-            onClick={() => {
-              // 同じボタンを2回押したら値を消去する（トグル動作）
+    <div className="group" style={{ flex: 'none', minHeight: 0 }}>
+      <div className="label">Situ</div>
+      <div className="content_table">
+        <div className="btnSitus" id="areaSitu">
+          {keyboardConfig.btns.map((btn, idx) => (
+            <div key={idx} className="btnSitu" onClick={() => {
               setInputValues(prev => ({ ...prev, situation: String(prev.situation) === String(btn.value) ? '' : btn.value }));
-            }}
-          >
-            {btn.label}
-          </div>
-        ))}
+            }}>
+              {btn.label}
+            </div>
+          ))}
+        </div>
       </div>
+    </div>
     );
   }
 
@@ -1096,17 +1088,12 @@ const renderMainContent = (
 
     <div id="inputArea" className= {offenseTeam === 0 ? "bgTeam0" : "bgTeam1"}>
       <div id="input_column">
-        {renderPlayerBtns()}
+        <div id="upperInputArea" style={{ display: "flex", gap: "10px", height:"250px", width:"100%" }}>
+          {renderSituBtns()}
+          {renderPlayerBtns()}
+        </div>
 
         <div className="row" style={{ display: 'flex', alignItems: 'flex-start', flex: 1, minHeight: 0 }}>
-          <div className="group">
-            <div className="label">Situ</div>
-            <div className="content" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
-              <div id="areaSitu" style={{ border: '1px solid red', width: '100%', boxSizing: 'border-box' }}>
-                {setPersistentSituation()}
-              </div>
-            </div>
-          </div>
 
           <div style={{ flex: 1, minHeight: 0 }}>
             <div id="areaKindWrapper" style={{ width: '100%', height: '100%' }}>
