@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const DrawGoal = ({ drawOut, onClick, width = 400, height = 300, showValue = false, values = [] }) => {
+const DrawGoal = ({ drawOut, onClick, onDeselect, width = 400, height = 300, showValue = false, values = [] }) => {
+  const [selectedGoal, setSelectedGoal] = useState(null);
   const svgWidth = 400, svgHeight = 300;
   const goalWidth = 300, goalHeight = 200;
   const thickness = 20;
@@ -19,8 +20,17 @@ const DrawGoal = ({ drawOut, onClick, width = 400, height = 300, showValue = fal
           y="0"
           width={svgWidth}
           height={y0}
-          fill="skyblue"
-          onClick={onClick ? (e => { e.stopPropagation(); onClick("goal", "Out"); }) : undefined}
+          fill={selectedGoal === 'Out' ? 'orange' : 'skyblue'}
+          onClick={onClick ? (e => { 
+            e.stopPropagation(); 
+            if (selectedGoal === 'Out') {
+              setSelectedGoal(null);
+              if (onDeselect) onDeselect();
+            } else {
+              setSelectedGoal('Out'); 
+              onClick("goal", "Out"); 
+            }
+          }) : undefined}
           style={{ cursor: onClick ? 'pointer' : 'default' }}
         />
         {/* 地面と空の境界線 */}
@@ -56,10 +66,19 @@ const DrawGoal = ({ drawOut, onClick, width = 400, height = 300, showValue = fal
         {/* ゴール枠 */}
         <polygon
           points={points}
-          fill="white"
+          fill={selectedGoal === 'Post' ? 'orange' : 'white'}
           stroke="black"
           strokeWidth="1"
-          onClick={onClick ? (e => { e.stopPropagation(); onClick("post", "Post"); }) : undefined}
+          onClick={onClick ? (e => { 
+            e.stopPropagation(); 
+            if (selectedGoal === 'Post') {
+              setSelectedGoal(null);
+              if (onDeselect) onDeselect();
+            } else {
+              setSelectedGoal('Post');
+              onClick("post", "Post"); 
+            }
+          }) : undefined}
           style={{ cursor: onClick ? 'pointer' : 'default' }}
         />
         {/* 角の黒四角 */}
@@ -139,6 +158,7 @@ const DrawGoal = ({ drawOut, onClick, width = 400, height = 300, showValue = fal
       const col = idx % cols;
       const x = left + col * ((right - left) / cols) + margin / 2;
       const y = top + row * ((bottom - top) / rows) + margin / 2;
+      const isSelected = selectedGoal === area.value;
 
       return (
         <g key={`rect-group-${area.id}`}>
@@ -147,12 +167,21 @@ const DrawGoal = ({ drawOut, onClick, width = 400, height = 300, showValue = fal
             y={y}
             width={width}
             height={height}
-            fill="lightgreen"
+            fill={isSelected ? 'orange' : 'lightgreen'}
             stroke="green"
             strokeWidth="3"
             rx={Math.min(width, height) * 0.2}
             ry={Math.min(width, height) * 0.2}
-            onClick={onClick ? (e => { e.stopPropagation(); onClick('goal', area.value); }) : undefined}
+            onClick={onClick ? (e => { 
+              e.stopPropagation(); 
+              if (isSelected) {
+                setSelectedGoal(null);
+                if (onDeselect) onDeselect();
+              } else {
+                setSelectedGoal(area.value);
+                onClick('goal', area.value); 
+              }
+            }) : undefined}
             style={{ cursor: onClick ? 'pointer' : 'default' }}
           />
           <text
@@ -162,7 +191,16 @@ const DrawGoal = ({ drawOut, onClick, width = 400, height = 300, showValue = fal
             dominantBaseline="middle"
             fontSize={Math.min(width, height) / 2.5}
             fill="black"
-            onClick={onClick ? (e => { e.stopPropagation(); onClick('goal', area.value); }) : undefined}
+            onClick={onClick ? (e => { 
+              e.stopPropagation(); 
+              if (isSelected) {
+                setSelectedGoal(null);
+                if (onDeselect) onDeselect();
+              } else {
+                setSelectedGoal(area.value);
+                onClick('goal', area.value); 
+              }
+            }) : undefined}
             style={{ cursor: onClick ? 'pointer' : 'default' }}
           >
             {showValue ? (values && values[idx] !== undefined ? values[idx] : area.text) : area.text}

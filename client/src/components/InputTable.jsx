@@ -22,6 +22,8 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
   const [twoMinSuspension, setTwoMinSuspension] = useState("");
   const [manualAtkCnt, setManualAtkCnt] = useState("A");
   const [popupMode, setPopupMode] = useState("");
+  const [is7M, setIs7M] = useState(false);
+
   const remarksInputRef = useRef(null);
 
   const [items, setItems] = useState([]);
@@ -382,10 +384,11 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
                 return (
                   <div
                     key={idx} 
-                    className={`btnPlayer ${isGK ? "colorGK" : "colorFP"}`}
+                    className={`btnPlayer ${isGK ? "colorGK" : "colorFP"} ${inputValues.player?.number === btn.value.number ? 'active' : ''}`}
                     onClick={() => {
                       setInputValues(prev => ({ ...prev, player: btn.value }));
                       append(String(btn.value.number));
+                      setIs7M(false);
                     }}
                   >
                     <div style={{ fontSize: "xx-large", fontWeight: "bold" }}>{btn.number}</div>
@@ -415,7 +418,7 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
       <div className="content_table">
         <div className="btnSitus" id="areaSitu">
           {keyboardConfig.btns.map((btn, idx) => (
-            <div key={idx} className="btnSitu" onClick={() => {
+            <div key={idx} className={`btnSitu ${inputValues.situation === btn.value ? 'active' : ''}`} onClick={() => {
               setInputValues(prev => ({ ...prev, situation: String(prev.situation) === String(btn.value) ? '' : btn.value }));
             }}>
               {btn.label}
@@ -426,6 +429,11 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     </div>
     );
   }
+
+
+
+
+
 
   const setKeyboardKind = (handleKeyboardClick) => {
     const keyboardConfig = {
@@ -458,44 +466,46 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     return result
   }
 
-  // setKeyboardKind を変更せずコピーして、常時表示用のKindボタンを生成する関数
-  const setPersistentKind = () => {
-    const keyboardConfig = {
-      btns: [
-            { label: '6', value: '6' },
-            { label: 'B', value: 'B' },
-            { label: 'P', value: 'P' },
-            { label: 'W', value: 'W' },
-            { label: '9', value: '9' },
-            { label: 'f', value: 'f' },
-            { label: 'f1', value: 'f1' },
-            { label: 'f2', value: 'f2' },
-            { label: 'f3', value: 'f3' },
-            { label: 'ag', value: 'ag' },
-            { label: '7', value: '7' },
-      ],
-    }
+  const renderKindBtns = () => {
+    const btns = [
+      { label: '6m', value: '6' },
+      { label: 'BT', value: 'B' },
+      { label: 'PV', value: 'P' },
+      { label: 'Wing', value: 'W' },
+      { label: '9m', value: '9' },
+      { label: 'fly', value: 'f' },
+      { label: 'f1', value: 'f1' },
+      { label: 'f2', value: 'f2' },
+      { label: 'f3', value: 'f3' },
+      { label: 'ag', value: 'ag' },
+      { label: '7m', value: '7' },
+      ];
+
     return (
-      <div className="btnPlayers">
-        {keyboardConfig.btns.map((btn, idx) => {
-          return (
-            <div
-              key={idx} 
-              className={`btnPlayer colorFP`}
-              onClick={() => {
-                setInputValues(prev => ({ ...prev, kind: btn.value }));
-              }}
-            >
-              <div className="fontLarge">{btn.label}</div>
-              <div className="fontSmall">{btn.value}</div>
-            </div>
-          );
-        })}
-        <div 
-          key="del" 
-          className={`btnPlayer colorDel`} 
-          onClick={() => { setInputValues(prev => ({ ...prev, kind: "" })); backspace(); }}>
-          <div className="fontLarge">削除</div>
+      <div className="group" style={{ flex:"6 1 0" , minHeight: 0 }}>
+        <div className="label">Kind</div>
+        <div className="content_table">
+          <div className="btnKinds" id="areaKind">
+            {btns.map((btn, idx) => {
+              return (
+                <div
+                key={idx} 
+                className={`btnKind colorFP ${inputValues.kind === btn.value && (btn.value !== '7' || is7M) ? 'active' : ''}`}
+                onClick={() => {
+                  if (btn.value === '7') {
+                    setInputValues(prev => ({ ...prev, kind: btn.value, shootArea: "7M" }));
+                    setIs7M(true);
+                  } else {
+                    setInputValues(prev => ({ ...prev, kind: btn.value }));
+                    setIs7M(false);
+                  }
+                  }}
+                >
+                  <div className="fontLarge">{btn.label}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
@@ -538,8 +548,19 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
               handleKeyboardClick(value);
             }
           }}
+          onDeselect={() => {
+            setInputValues(prev => {
+              if (prev.kind === '7') {
+                return { ...prev, shootArea: "", kind: "" };
+              }
+              return { ...prev, shootArea: "" };
+            });
+            setIs7M(false);
+          }}
           width="100%"
           height="auto"
+          is7M={is7M}
+          setIs7M={setIs7M}
         />
       )
     }
@@ -568,6 +589,7 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
       <div className="keyboard-body" style={{ marginTop: '10px', height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
         <DrawGoal
           drawOut={true}
+          onDeselect={() => setInputValues(prev => ({ ...prev, goal: "" }))}
           onClick={(_type, value) => {
             setInputValues(prev => ({ ...prev, goal: value }));
           }}
@@ -578,36 +600,32 @@ export default function InputSheet({ teams, players, setView, matchId, isEditor,
     );
   }
 
-  const setPersistentResult = () => {
-    const keyboardConfig = {
-      btns: [
-            { label: 'ゴール', value: 'g' },
-            { label: 'ミス', value: 'm' },
-            { label: 'セーブ', value: 's' },
-            { label: '7mをとった', value: 'p' },
-            { label: 'ファールとられた', value: 'f' },
-            { label: 'わからない', value: 'r' },
-            { label: 'Out Goal', value: 'o' },
-      ],
-      grid: "repeat(2, 1fr)"
-    }
+  const renderResultBtns = () => {
+    const btns = [
+      { label: 'ゴール', value: 'g' },
+      { label: 'ミス', value: 'm' },
+      { label: 'セーブ', value: 's' },
+      { label: '7mをとった', value: 'p' },
+      { label: 'ファールとられた', value: 'f' },
+      { label: 'わからない', value: 'r' },
+      { label: 'Out Goal', value: 'o' },
+    ];
+
     return (
-      <div className="keyboard-body persistent result" style={{ display: 'grid', gridTemplateColumns: keyboardConfig.grid, gridTemplateRows: 'repeat(5, 1fr)', gap: '10px', marginTop: '10px', width: '100%', height: '100%', minWidth: 0, overflow: 'hidden' }}>
-        {keyboardConfig.btns.map((btn, idx) => (
-          <div 
-            key={idx} 
-            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontSize: '0.75rem', overflow: 'hidden', width: '100%', boxSizing: 'border-box', minWidth: 0 }} className={"keyboard-btn " + (String(inputValues.result) === String(btn.value) ? 'active' : '')} 
-            onClick={() => setInputValues(prev => ({ ...prev, result: btn.value }))}
-          >
-            <div className="fontLarge">{btn.value}</div>
-            <div className="fontSmall">{btn.label}</div>
+      <div className="group" style={{ flex:"4 1 0", minHeight: 0 }}>
+        <div className="label">Result</div>
+        <div className="content_table">
+          <div className="btnResults" id="areaResult">
+            {btns.map((btn, idx) => (
+              <div key={idx}
+              className={`btnResult ${inputValues.result === btn.value ? 'active' : ''}`}
+              onClick={() => setInputValues(prev => ({ ...prev, result: btn.value }))}
+            >
+                <div className="fontLarge">{btn.value}</div>
+                <div className="fontSmall">{btn.label}</div>
+              </div>
+            ))}
           </div>
-        ))}
-        <div 
-          key="del" 
-          className={`btnPlayer colorDel`} 
-          onClick={() => { setInputValues(prev => ({ ...prev, result: "" })); backspace(); }}>
-          <div className="fontLarge">削除</div>
         </div>
       </div>
     )
@@ -1080,146 +1098,75 @@ const renderMainContent = (
       </button>
       {renderOffenseTeamBtn}
       {renderDefenseGKBtn}
-      <div style={{ flex: 1 }}>
+      <div style={{ display: "flex"}}>
         {renderSetPlay}
         {inputedValues}
       </div>
     </div>
 
-    <div id="inputArea" className= {offenseTeam === 0 ? "bgTeam0" : "bgTeam1"}>
-      <div id="input_column">
-        <div id="upperInputArea" style={{ display: "flex", gap: "10px", height:"250px", width:"100%" }}>
-          {renderSituBtns()}
-          {renderPlayerBtns()}
-        </div>
-
-        <div className="row" style={{ display: 'flex', alignItems: 'flex-start', flex: 1, minHeight: 0 }}>
-
-          <div style={{ flex: 1, minHeight: 0 }}>
-            <div id="areaKindWrapper" style={{ width: '100%', height: '100%' }}>
-              <div className="group">
-                <div className="label">Kind</div>
-                <div
-                  className="content"
-                  style={{
-                    position: 'relative',
-                    overflow: 'hidden',
-                    width: '100%',
-                    height: '100%',
-                    boxSizing: 'border-box',
-                    minHeight: 0,
-                  }}
-                >
-                  <div
-                    id="areaKind"
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      zIndex: 1,
-                      height: '100%',
-                    }}
-                  >
-                    {setPersistentKind()}
-                  </div>
-
-                  <div
-                    id="areaKindBack"
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      zIndex: 0,
-                      pointerEvents: 'none',
-                    }}
-                  >
-                    <div
-                      style={{
-                        transform: 'rotate(-90deg)',
-                        transformOrigin: 'center center',
-                        width: '90%',
-                        height: '90%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      {/* <DrawShootArea width="100%" height="100%" showText={false} /> */}
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div style={{ display: 'flex', gap: '10px', height: '100%' }}>
+      {/* 左側 */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div id="inputArea" className={offenseTeam === 0 ? "bgTeam0" : "bgTeam1"}>
+          <div id="input_column">
+            <div id="upperInputArea" style={{ display: "flex", gap: "10px", height:"300px", width:"100%" }}>
+              {renderPlayerBtns()}
             </div>
-          </div>
-
-          <div className="group">
-            <div className="label">Result</div>
-            <div className="content" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
-              <div id="areaResult" style={{ width: '100%', boxSizing: 'border-box' }}>
-                {setPersistentResult()}
-              </div>
+            <div id="lowerInputArea" style={{ display: "flex", gap: "10px", height:"300px", width:"100%" }}>
+              {renderSituBtns()}
+              {renderKindBtns()}
+              {renderResultBtns()}
             </div>
           </div>
         </div>
+
       </div>
 
+      {/* 右側 */}
       <div
         id="rightColumn"
         style={{
           display: 'flex',
           flexDirection: 'column',
-          height: '100%',
           width: '400px',
           flex: '0 0 auto',
           minWidth: 0,
+          position: 'relative',
         }}
       >
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, width: '100%' }}>
-          <div
-            className="group"
-            style={{
-              flex: 1,
-              minHeight: 0,
-              maxHeight: '400px',
-              overflowY: 'auto',
-              width: '100%',
-              boxSizing: 'border-box',
-            }}
-          >
+          <div className="group">
             <div className="label">Area</div>
             <div className="content">
-              <div id="areaArea" style={{ width: '100%', height: '100%' }}>
-                <div style={{ border: '1px solid red', display: 'block', height: '100%' }}>
+              <div id="areaArea">
                   <DrawShootArea
                     width="100%"
                     height="100%"
+                    is7M={is7M}
+                    setIs7M={setIs7M}
+                    onDeselect={() => {
+                      setInputValues((prev) => {
+                        if (prev.kind === '7') {
+                          return { ...prev, shootArea: "", kind: "" };
+                        }
+                        return { ...prev, shootArea: "" };
+                      });
+                      setIs7M(false);
+                    }}
                     onClick={(t, value) => {
                       if (t === 'area') {
                         setInputValues((prev) => ({ ...prev, shootArea: value }));
                       }
                     }}
                   />
-                </div>
               </div>
             </div>
           </div>
 
-          <div
-            className="group"
-            style={{
-              flex: 1,
-              minHeight: 0,
-              maxHeight: '400px',
-              overflowY: 'auto',
-              width: '100%',
-              boxSizing: 'border-box',
-            }}
-          >
-            <div className="label">Goal</div>
-            <div className="content" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
-              <div id="areaGoal" style={{ border: '1px solid red', width: '100%', boxSizing: 'border-box' }}>
+          <div className="group">
+            <div className="label_inner">Goal</div>
+            <div className="content_map">
+              <div id="areaGoal">
                 {setPersistentGoal()}
               </div>
             </div>

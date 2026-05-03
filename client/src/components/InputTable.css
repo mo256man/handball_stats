@@ -292,6 +292,63 @@
   align-items: center;
 }
 
+.btnPlayer.active {
+  background: orangered;
+}
+
+.btnKinds {
+  flex: 1;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  box-sizing: border-box;
+  overflow: auto;
+  min-width: 0;
+}
+
+.btnKind {
+  color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnKind.active {
+  background: orangered;
+}
+
+.btnResults {
+  flex: 1;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  box-sizing: border-box;
+  overflow: auto;
+  min-width: 0;
+}
+
+.btnResult {
+  color: white;
+  background: darkgreen;
+  border-radius: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnResult.active {
+  background: orangered;
+}
+
 .fontLarge {
   font-size: x-large;
   font-weight: bold;
@@ -299,6 +356,23 @@
 
 .fontSmall {
   font-size: small;
+}
+
+.btnSitu {
+  color: white;
+  background: darkblue;
+  border-radius: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btnSitu.active {
+  background: orangered;
 }
 
 .colorGK {
